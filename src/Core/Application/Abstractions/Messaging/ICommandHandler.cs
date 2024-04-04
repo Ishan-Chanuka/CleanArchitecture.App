@@ -1,6 +1,6 @@
 ﻿using Domain.Primitives;
 
-namespace Application.Abstractions
+namespace Application.Abstractions.Messaging
 {
     public interface ICommandHandler<in TCommand> where TCommand : ICommand
     {
