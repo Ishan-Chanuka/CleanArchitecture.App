@@ -8,5 +8,6 @@ namespace Application.Abstractions.Services
         Task<Product> UpdateAsync(Product product);
         Task<Product> GetByNameAsync(string name);
         Task<IEnumerable<ProductResponseModel>> GetAllProductsAsync();
+        Task<ProductResponseModel?> GetByIdAsync(Guid id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.Primitives;
+﻿using Domain.Exceptions;
+using Domain.Primitives;
 
 namespace Clean.API.Extensions
 {
@@ -9,6 +10,18 @@ namespace Clean.API.Extensions
             if (result.IsSuccess)
             {
                 throw new InvalidOperationException("Can't convert success result to problem");
+            }
+
+            if (result.Error.Code.EndsWith(nameof(ApiError.NotFound)))
+            {
+                return Results.Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Not Found",
+                type: "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4",
+                extensions: new Dictionary<string, object?>
+                {
+                    { "errors", new[] { result.Error } }
+                });
             }
 
             return Results.Problem(

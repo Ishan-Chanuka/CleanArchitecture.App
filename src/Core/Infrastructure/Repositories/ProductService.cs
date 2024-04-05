@@ -33,6 +33,22 @@ namespace Infrastructure.Repositories
             return products;
         }
 
+        public async Task<ProductResponseModel?> GetByIdAsync(Guid id)
+        {
+            var product = await _context.Products
+                .Select(p => new ProductResponseModel
+                {
+                    Id = p.Id,
+                    CategoryId = p.CategoryId,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price
+                })
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return product;
+        }
+
         public Task<Product> UpdateAsync(Product product)
         {
             throw new NotImplementedException();

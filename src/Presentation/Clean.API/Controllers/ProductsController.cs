@@ -1,5 +1,6 @@
 ﻿using Application.Products.Commands.CreateProduct;
 using Application.Products.Queries.GetAllProducts;
+using Application.Products.Queries.GetById;
 using Clean.API.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,14 @@ namespace Clean.API.Controllers
         public async Task<IResult> GetAllProducts()
         {
             var result = await _mediator.Send(new GetAllProductsQuery());
+
+            return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IResult> GetProductById(Guid id)
+        {
+            var result = await _mediator.Send(new GetByIdQuery(id));
 
             return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
         }
