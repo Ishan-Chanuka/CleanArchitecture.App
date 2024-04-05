@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions.Services;
-using Domain.Exceptions;
 using Domain.Models;
+using Domain.ResponseModels;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +14,23 @@ namespace Infrastructure.Repositories
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Name == name);
 
-            return product ?? throw new NotFoundException(nameof(Product), name);
+            return product;
+        }
+
+        public async Task<IEnumerable<ProductResponseModel>> GetAllProductsAsync()
+        {
+            var products = await _context.Products
+                .Select(p => new ProductResponseModel
+                {
+                    Id = p.Id,
+                    CategoryId = p.CategoryId,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price
+                })
+                .ToListAsync();
+
+            return products;
         }
 
         public Task<Product> UpdateAsync(Product product)

@@ -1,6 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Abstractions.Services;
-using Domain.Abstraction;
 using Domain.Exceptions;
 using Domain.Models;
 using Domain.Primitives;
@@ -11,12 +10,10 @@ namespace Application.Products.Commands.CreateProduct
     {
         private readonly IProductService _productService;
         private readonly IGenericRepository<Product> _productRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public CreateProductCommandHandler(IProductService productService, IUnitOfWork unitOfWork, IGenericRepository<Product> productRepository)
+        public CreateProductCommandHandler(IProductService productService, IGenericRepository<Product> productRepository)
         {
             _productService = productService;
-            _unitOfWork = unitOfWork;
             _productRepository = productRepository;
         }
 

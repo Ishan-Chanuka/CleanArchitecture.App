@@ -1,5 +1,6 @@
 using Application;
 using Clean.API.Infrastructure;
+using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.DatabaseExtention(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddRepositories();
 
 builder.Services.AddExceptionHandler<GlobalErrorHandler>();
 builder.Services.AddProblemDetails();

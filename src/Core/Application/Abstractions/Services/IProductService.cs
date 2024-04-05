@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.ResponseModels;
 
 namespace Application.Abstractions.Services
 {
@@ -6,5 +7,6 @@ namespace Application.Abstractions.Services
     {
         Task<Product> UpdateAsync(Product product);
         Task<Product> GetByNameAsync(string name);
+        Task<IEnumerable<ProductResponseModel>> GetAllProductsAsync();
     }
 }
