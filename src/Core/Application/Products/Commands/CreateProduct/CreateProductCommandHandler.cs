@@ -7,7 +7,7 @@ using Domain.Primitives;
 
 namespace Application.Products.Commands.CreateProduct
 {
-    public sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
+    public sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, Guid>
     {
         private readonly IProductService _productService;
         private readonly IGenericRepository<Product> _productRepository;
@@ -20,13 +20,14 @@ namespace Application.Products.Commands.CreateProduct
             _productRepository = productRepository;
         }
 
-        public async Task<Result> HandleAsync(CreateProductCommand command)
+        public async Task<Result<Guid>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
             var isProductExists = await _productService.GetByNameAsync(command.Product.Name);
 
             if (isProductExists is not null)
             {
-                return ApiError.BadRequest("Product", "Product already exists");
+                return Result.Failure<Guid>(
+                    ApiError.BadRequest("Product", "Product already exists"));
             }
 
             var product = new Product(command.Product.Name, command.Product.Price, command.Product.CategoryId);
@@ -35,10 +36,10 @@ namespace Application.Products.Commands.CreateProduct
 
             if (result.IsFailure)
             {
-                return Result.Failure(result.Error);
+                return Result.Failure<Guid>(result.Error);
             }
 
-            return Result.Success();
+            return product.Id;
         }
     }
 }
