@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions.Services;
+using Domain.Abstraction;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace Infrastructure
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         public static void EnsureMigrationOfContext(this IServiceCollection services)
